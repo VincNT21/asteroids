@@ -1,3 +1,5 @@
+# part of it given by boot.dev
+
 import pygame
 from circleshape import *
 from constants import *

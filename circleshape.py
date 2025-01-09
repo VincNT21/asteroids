@@ -1,3 +1,5 @@
+# not my work but given by boot.dev
+
 import pygame
 
 # Base class for game objects
