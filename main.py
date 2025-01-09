@@ -6,6 +6,7 @@ from asteroid import Asteroid
 from AsteroidField import *
 from circleshape import CircleShape
 from shot import Shot
+from powerups import PowerUp, FireRate
 
 
 def main():
@@ -22,14 +23,18 @@ def main():
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    powerups = pygame.sprite.Group()
 
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (shots, updatable, drawable)
+    PowerUp.containers = (powerups, updatable, drawable)
+
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     asteroidfield = AsteroidField()
+    powerup = FireRate(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2)
 
 
     while True:
@@ -49,6 +54,10 @@ def main():
                 if bullet.check_collision(asteroid):
                     asteroid.split()
                     bullet.kill()
+
+        for pu in powerups:
+            if pu.check_collision(player):
+                player.timer_speed_up -= 0.5
 
         screen.fill("black")
         for obj in drawable:
