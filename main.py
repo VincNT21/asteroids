@@ -1,5 +1,6 @@
 import sys
 import pygame
+import pygame.freetype
 from constants import * 
 from player import Player
 from asteroid import Asteroid
@@ -11,6 +12,7 @@ from powerups import PowerUp, FireRate
 
 def main():
     pygame.init()
+    pygame.freetype.init()
     print("Starting asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
@@ -18,6 +20,8 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0
+    game_font = pygame.freetype.SysFont("Comic Sans MS", 30)
+    player_score = 0
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -52,8 +56,11 @@ def main():
 
             for bullet in shots:
                 if bullet.check_collision(asteroid):
+                    if asteroid.radius <= ASTEROID_MIN_RADIUS:
+                        player_score += 100
                     asteroid.split()
                     bullet.kill()
+                    
 
         for pu in powerups:
             if pu.check_collision(player):
@@ -62,6 +69,9 @@ def main():
         screen.fill("black")
         for obj in drawable:
             obj.draw(screen)
+
+        game_font.render_to(screen, (10, 10), f"SCORE : {player_score}", "white")
+
         pygame.display.flip()
 
         # limit the framerate to 60 FPS
